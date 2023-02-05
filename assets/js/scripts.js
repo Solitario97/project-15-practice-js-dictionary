@@ -17,10 +17,17 @@ const containerWord = document.querySelector('.results-word');
 const soundButton = document.querySelector('.results-sound');
 const resultsWrapper = document.querySelector('.results');
 const resultsList = document.querySelector('.results-list');
+const errorContainer = document.querySelector(".error");
 
+const showError = (error) => {
+  errorContainer.style.display = "block";
+  resultsWrapper.style.display = "none";
+
+  errorContainer.innerText = error.message;
+};
 
 const renderItem = (item) => {
-  const itemDefinition = item.definition[0];
+  const itemDefinition = item.definitions[0];
     return `<div class="results-item">
               <div class="results-item__part">${item.partOfSpeech}</div>
                 <div class="results-item__definitions">
@@ -52,7 +59,7 @@ const handleSubmit = async (e) => {
     const response = await fetch(`${url}${state.word}`);
     const data = await response.json();
 
-    if(response.ok && data.length){
+    if (response.ok && data.length) {
       const item = data[0];
 
       state = {
@@ -60,8 +67,11 @@ const handleSubmit = async (e) => {
         meanings: item.meanings,
         phonetics: item.phonetics,
       };
+
       insertWord();
       showResults();
+    } else {
+      showError(data);
     }
   } catch (err) {
     console.log(err);
@@ -74,7 +84,7 @@ const handleKeyup = (e) => {
 };
 
 const handleSound = () =>{
-  if(state.phonetics.length) {
+  if (state.phonetics.length) {
     const sound = state.phonetics[1];
 
     if(sound.audio) {
@@ -82,6 +92,8 @@ const handleSound = () =>{
     }
   }
 };
+
+
 // events
 
 input.addEventListener('keyup', handleKeyup);
