@@ -15,6 +15,29 @@ const input = document.getElementById('word-input');
 const form = document.querySelector('.form');
 const containerWord = document.querySelector('.results-word');
 const soundButton = document.querySelector('.results-sound');
+const resultsWrapper = document.querySelector('.results');
+const resultsList = document.querySelector('.results-list');
+
+
+const renderItem = (item) => {
+  const itemDefinition = item.definition[0];
+    return `<div class="results-item">
+              <div class="results-item__part">${item.partOfSpeech}</div>
+                <div class="results-item__definitions">
+                  <div class="results-item__definition">
+                    <p>${itemDefinition.definition}</p>
+                    <div class="results-item__example">${itemDefinition.example}</div>
+                  </div>
+                </div>
+              </div>`;
+};
+
+const showResults = () => {
+  resultsWrapper.style.display = 'block';
+  resultsList.innerHTML = '';
+
+  state.meanings.forEach((item) => (resultsList.innerHTML += renderItem(item)));
+};
 
 const insertWord = () => {
   containerWord.innerText = state.word;
@@ -35,9 +58,10 @@ const handleSubmit = async (e) => {
       state = {
         ...state,
         meanings: item.meanings,
-        phonetics: item.phonetics
+        phonetics: item.phonetics,
       };
       insertWord();
+      showResults();
     }
   } catch (err) {
     console.log(err);
