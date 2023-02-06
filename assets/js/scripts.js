@@ -19,6 +19,8 @@ const resultsWrapper = document.querySelector('.results');
 const resultsList = document.querySelector('.results-list');
 const errorContainer = document.querySelector(".error");
 
+
+
 const showError = (error) => {
   errorContainer.style.display = "block";
   resultsWrapper.style.display = "none";
@@ -26,15 +28,28 @@ const showError = (error) => {
   errorContainer.innerText = error.message;
 };
 
+const renderDefinition = (itemDefinition) => {
+  const example = itemDefinition.example 
+  ? `<div class="results-item__example">
+      <p>Example: <span>${itemDefinition.example}</span></p>
+    </div>`
+  : '';
+
+  return `<div class="results-item__definition">
+            <p>${itemDefinition.definition}</p>
+            ${example}
+          </div>`;
+};
+
+const getDefinitions = (definitions) => {
+  return definitions.map(renderDefinition).join('');
+};
+
 const renderItem = (item) => {
-  const itemDefinition = item.definitions[0];
     return `<div class="results-item">
               <div class="results-item__part">${item.partOfSpeech}</div>
                 <div class="results-item__definitions">
-                  <div class="results-item__definition">
-                    <p>${itemDefinition.definition}</p>
-                    <div class="results-item__example">${itemDefinition.example}</div>
-                  </div>
+                  ${getDefinitions(item.definitions)}
                 </div>
               </div>`;
 };
@@ -52,6 +67,8 @@ const insertWord = () => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+
+  errorContainer.style.display = 'none';
 
   if (!state.word.trim()) return;
 
