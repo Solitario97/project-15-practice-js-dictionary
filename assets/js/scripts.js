@@ -19,10 +19,10 @@ const resultsWrapper = document.querySelector('.results');
 const resultsList = document.querySelector('.results-list');
 const errorContainer = document.querySelector(".error");
 
-window.onload = function() {
+/* window.onload = function() {
   let loader = document.querySelector('.loader');
   loader.style.display = 'none';
-};
+}; */
 
 const showError = (error) => {
   errorContainer.style.display = "block";
